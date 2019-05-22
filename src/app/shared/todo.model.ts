@@ -1,0 +1,12 @@
+export class Todo {
+  id: string;
+  work: string;
+  completionDate: Date;
+  daysDelayed: number;
+  idOfUser: string;
+  priority: number;
+  type: string;
+  // users: {
+  //   userId: boolean;
+  // }
+}

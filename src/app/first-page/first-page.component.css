@@ -1,0 +1,16 @@
+#groceryImg{
+  background-image: url("https://images.unsplash.com/photo-1556477632-f920fad6dbc9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60");
+}
+
+#officeImg{
+  background-image: url("https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60");
+}
+#collageImg{
+  background-image: url("https://images.unsplash.com/photo-1474650919751-b7e21a1b180f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60");
+ 
+}
+.img{
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}

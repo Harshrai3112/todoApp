@@ -1,0 +1,20 @@
+<div id="loginComp">
+<div class="backColor" >
+<h1 class="text-center mt-4 mb-2 text-info display-1">Login</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 ">
+      <form class="form-group ">
+        <input type="email" class="form-control m-2" placeholder="Email" [(ngModel)]="email" [ngModelOptions]="{standalone: true}">
+        <input type="password" class="m-2 form-control" placeholder="Password" [(ngModel)]="passwd" [ngModelOptions]="{standalone: true}">
+        <button class="btn btn-info btn-block m-1" (click)="signIn()">Sign In</button>
+        <button class="btn btn-primary btn-block ml-1" (click)="doGoogleLogin()">Google Login</button>
+        <a class="btn btn-danger btn-block m-1 "  routerLink="/register">Create Account</a>
+      </form>  
+    </div>
+  </div>
+  
+</div>
+</div> 
+</div>
