@@ -7,7 +7,7 @@ import {Office} from 'src/app/shared/office.model';
 export class OfficeService {
 
   createOffice(office){
-    return this.firestore.collection('office').add(office);
+    return this.firestore.collection('office').doc(office.name).set(office);
   }
   getOffice(){
    return this.firestore.collection('office').snapshotChanges();

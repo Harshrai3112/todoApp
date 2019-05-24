@@ -64,7 +64,7 @@
                     <input type="date" class="form-control" placeholder="completion date" [ngModelOptions]="{standalone: true}" value="{{currentDate | date:'MM/dd/yy'}}"
                       [(ngModel)]="completionDate">
                     <br>
-                    <input type="text" class="form-control" placeholder="Assign Task" [ngModelOptions]="{standalone: true}" 
+                    <input *ngIf='type ==="office"' type="text" class="form-control" placeholder="Assign Task" [ngModelOptions]="{standalone: true}" 
                     [(ngModel)]="assignTask">
                     <br>
                     <sm-button class="basic olive" (click)="updateTodo(todo.id,i)">Update</sm-button>
@@ -79,7 +79,7 @@
   </div>
   </sm-list>
   <div class=" text-center">
-    <sm-button class="circular basic blue mt-2 big" icon="plus" (click)="toggleTask()"> </sm-button>
+    <sm-button class="circular basic blue mt-2 big" title="Add type of work you want to complete(like Shopping, Grocery ... )" icon="plus" (click)="toggleTask()"> </sm-button>
   </div>
  
 </div>
@@ -93,8 +93,8 @@
     <input type="date" class="form-control" placeholder="completion date" [ngModelOptions]="{standalone: true}" required
       [(ngModel)]="completionDate" >
       <br>
-      <label for="">Assign  Task to</label>
-      <input type="text" class="form-control" placeholder="Assign Task" [ngModelOptions]="{standalone: true}"
+      <label *ngIf='type ==="office" ' for="">Assign  Task to</label>
+      <input *ngIf='type ==="office"' type="text" class="form-control" placeholder="Assign Task" [ngModelOptions]="{standalone: true}"
       [(ngModel)]="assignTask" >
       <br>
     <button class="btn btn-outline-primary" (click)="makeTodo()">Add To List</button>
@@ -102,7 +102,7 @@
 </div>
 
 <div class="container mt-1" *ngIf="type.toLowerCase()==='office'">
-  <h3>People in same Company</h3>
+  <h3>These Minds also work in <span class="text-danger">{{office}}</span></h3>
 <sm-list class="animated" >
   <sm-item *ngFor="let item of user "  >
     <sm-segment class="raised colored blue">{{item.userName}} 

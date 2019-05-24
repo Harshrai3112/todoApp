@@ -6,6 +6,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { UserService } from 'src/app/shared/user.service';
 import { User } from 'src/app/shared/user.model';
+import { AngularFirestore } from '@angular/fire/firestore';
 import {
   trigger,
   state,
@@ -60,56 +61,44 @@ export class TodoListComponent implements OnInit {
   currentDate = new Date();
   assignTask: string;
   // tslint:disable-next-line:max-line-length
-  constructor(private todoService: TodosService, private router: Router, private afAuth: AngularFireAuth, private route: ActivatedRoute, private userService: UserService) {
+  constructor(private todoService: TodosService, private router: Router, private afAuth: AngularFireAuth, private route: ActivatedRoute, private userService: UserService, private firestore: AngularFirestore) {
   }
   ngOnInit() {
-    console.log(this.currentDate);
     this.type = this.route.snapshot.paramMap.get('type');
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.userId = user.uid;
       }
-    });
-    this.todoService.getTodo().subscribe(data => {
-      this.todos = data.map(item => {
-        return {
-          id: item.payload.doc.id,
-          ...item.payload.doc.data()
-        } as Todo;
+
+      // tslint:disable-next-line:max-line-length
+      this.firestore.collection('todos', ref => ref.where('idOfUser', '==', this.userId).where('type', '==', this.type)).snapshotChanges().subscribe(val => {
+        this.todos = val.map(item => {
+          return {
+            id: item.payload.doc.id,
+            ...item.payload.doc.data()
+          } as Todo;
+        });
+        this.todos.forEach(va => {
+          if (va.priority > this.maxPri) {
+            this.maxPri = va.priority;
+          }
+        });
+        this.todos.sort((a, b) => {
+          return a.priority - b.priority;
+        });
+
+        this.firestore.collection('User', ref => ref.where('userId', '==', this.userId)).snapshotChanges().subscribe(temp => {
+          this.office = temp.map(item => {
+            return item.payload.doc.data().officeId;
+          })[0];
+          // tslint:disable-next-line:max-line-length
+          this.firestore.collection('User', ref => ref.where('officeId', '==', this.office)).snapshotChanges().subscribe(val => {
+            this.user = val.map(item => {
+              return item.payload.doc.data();
+            });
+          });
+        });
       });
-      this.todos.forEach(val => {
-        if (val.priority > this.maxPri) {
-          this.maxPri = val.priority;
-        }
-      });
-      for (let i = 0; i < this.todos.length; i++) {
-        if (this.todos[i].type !== this.type) {
-          this.todos.splice(i, 1);
-          i--;
-        }
-      }
-      this.todos.sort((a, b) => {
-        return a.priority - b.priority;
-      });
-    });
-    this.userService.getUser().subscribe(data => {
-      this.user = data.map(item => {
-        return {
-          id: item.payload.doc.id,
-          ...item.payload.doc.data()
-        } as User;
-      });
-      this.user.forEach(user => {
-        if (user.userId === this.userId) {  
-          this.office = user.officeName;
-        }
-      });
-      for (let i = 0; i < this.user.length; i++) {
-        if (this.user[i].officeName !== this.office || this.user[i].userId===this.userId) {
-          this.user.splice(i, 1);
-          i--;
-        }
-      }
     });
   }
   makeTodo() {
@@ -121,7 +110,7 @@ export class TodoListComponent implements OnInit {
     this.data = Object.assign({}, { work: this.work, completionDate: this.completionDate, daysDelayed: this.dateDiff(this.completionDate, new Date()), idOfUser: this.userId, priority: this.maxPri + 1, type: this.type });
     this.todoService.createTodo(this.data);
     this.user.forEach(user => {
-      if (this.assignTask !== undefined && user.userName.toLowerCase() === this.assignTask.toLowerCase()) {  
+      if (this.assignTask !== undefined && user.userName.toLowerCase() === this.assignTask.toLowerCase()) {
         // tslint:disable-next-line:max-line-length
         this.data = Object.assign({}, { work: this.work, completionDate: this.completionDate, daysDelayed: this.dateDiff(this.completionDate, new Date()), idOfUser: user.userId, priority: this.maxPri + 1, type: this.type });
         this.todoService.createTodo(this.data);
@@ -156,7 +145,7 @@ export class TodoListComponent implements OnInit {
     this.data = Object.assign({}, { work: this.work, completionDate: this.completionDate, daysDelayed: this.dateDiff(this.completionDate, new Date()) });
     this.todoService.update(id, this.data);
     this.user.forEach(user => {
-      if (user.userName === this.assignTask) {  
+      if (user.userName.toLowerCase() === this.assignTask.toLowerCase() && this.assignTask !== undefined) {
         // tslint:disable-next-line:max-line-length
         this.data = Object.assign({}, { work: this.work, completionDate: this.completionDate, daysDelayed: this.dateDiff(this.completionDate, new Date()), idOfUser: user.userId, priority: this.maxPri + 1, type: this.type });
         this.todoService.createTodo(this.data);

@@ -49,7 +49,6 @@ export class LoginComponent implements OnInit {
         }
         this.userArray.forEach(element => {
           if ((result.user.uid) === element.userId) {
-            console.log(JSON.stringify(result.user) );
             // console.log('existing user');
             this.flag = 1;
           }// else {  
@@ -67,7 +66,6 @@ export class LoginComponent implements OnInit {
     this.afAuth.auth.signInWithEmailAndPassword(this.email, this.passwd)
       .then(result => {
         this.router.navigate(['homePage']);
-        console.log(JSON.stringify(this.afAuth.auth.currentUser));
       }).catch(error => {
         window.alert(error.message);
       });
