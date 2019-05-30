@@ -1,0 +1,38 @@
+<sm-menu class=" inverted blue mb-4">
+    <div class=" item">
+        <i class="tasks icon"></i>
+    </div>
+    <a routerLink='/homePage' class="header item" style="font-size:18px;">TodoApp</a>
+    <sm-menu class="right menu pr-4">
+        <a href="" class="item">
+            Hey {{user[0].userName}}</a>
+        <sm-button href="" class="item " icon="sign out" (click)="signOut()">Logout</sm-button>
+    </sm-menu>
+</sm-menu>
+
+
+<div class="container">
+  <div class="ui  grid segment">
+    <div class="four wide column centered aligned m-0 ml-5">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60" style="max-width: 100%; max-height:80%;" alt="">
+    </div>
+    <div class="eight wide column  left floated ">
+      <p class="name">{{user[0].userName}} </p>
+      <sm-list class="divided">
+        <sm-item class="">
+          <i class="envelope icon "></i> 
+          <span   class="m-1 " >{{user[0].email}}</span> 
+        </sm-item>
+        <sm-item class="" *ngIf='user[0].officeId'>  
+          <i class="globe icon"></i>
+           <span *ngIf='!companyUp' class="m-1  ">{{user[0].officeId}}</span> 
+           <i *ngIf='!companyUp' class="pencil alternate icon right floated" (click)="companyChange()"></i>
+           <form action="" class="form-group" *ngIf='companyUp'>
+              <i class="close icon" (click)='companyChange()'></i>
+              <input type="text" placeholder="Company" [ngModelOptions]="{standalone: true}" class="form-control" [(ngModel)]="company">
+            <sm-button class="mt-2" (click)="updateCompany()">Update</sm-button>
+          </form>
+        </sm-item>
+      </sm-list>
+  </div>
+</div>

@@ -1,195 +1,166 @@
-<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">TodoApp</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">About Us</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link " href="#">Logout</a>
-      </li>
-    </ul>
-  </div>
-</nav> -->
 <sm-menu class=" inverted blue ">
   <div class=" item">
-      <i class="tasks icon"></i>
+    <i class="tasks icon"></i>
   </div>
-  <a href="" class="header item" style="font-size:18px;">TodoApp</a>
+  <a href="" class="header item" style="font-size:18px;" routerLink='/homePage'>TodoApp</a>
   <sm-menu class="right menu pr-4">
-      <a href="" class="item">About Us</a>
-      <sm-button href="" class="item " icon="sign out" (click)="SignOut()">Logout</sm-button>
+    <a routerLink='/user/profile' class="item">Hey {{userName}}</a>
+    <sm-button href="" class="item " icon="sign out" (click)="SignOut()">Logout</sm-button>
   </sm-menu>
 </sm-menu>
 <!-- Navbar Ends and List of tasks Starts -->
-<h1 class=" text-center">{{type}}</h1>
+<h1 class=" text-center">{{type.toUpperCase()}}</h1>
 <div class="d-flex justify-content-end container">
 </div>
-<div class="container">
-  <sm-list class="animated" >
-    <div   cdkDropList (cdkDropListDropped)="drop($event)" >
-      <sm-item *ngFor='let todo of todos ; let i = index'   class=""[@openClose]="fadingArray[i] ? 'closed' : 'open'"   cdkDrag  >
-        <div *ngIf="todo.idOfUser===userId">
-        <!-- <div class="row" >
+<!-- ================================================================ -->
+               <!--     Starting of List        -->
+<!-- ================================================================ -->
+<div class="container mb-3">
+  <div class="ui stackable grid">
+    <sm-segment class="eight wide column" *ngFor="let status of status; let j= index" >
+      <h3 class="text-center">{{status.status.toUpperCase()}}</h3>
+      <!-- <sm-list> -->
+      <div cdkDropList (cdkDropListDropped)="drop($event,status.status)"   id='{{j}}' [cdkDropListConnectedTo]="noOfStatArray">
+        <div *ngFor='let todo of todos ; let i = index' [@openClose]="fadingArray[i] ? 'closed' : 'open'" cdkDrag>
+          <div *ngIf="todo.taskStatus=== status.status ">
+            <!-- <div class="row" >
           <div class="col-md-6"> -->
-              <sm-segment class="mt-1 raised  blue" ><span style="font-size:1.2em;font-weight:500">{{todo.work}}</span> - <span *ngIf="todo.daysDelayed>0 ;else elsePart" class="text-success" style="font-size:1em;">Remaining days are
-                  {{todo.daysDelayed}}</span>
-                <ng-template class="text-danger" #elsePart> <span class="text-danger" style="font-size:1.2em;font-weight: 500">Pending since {{-todo.daysDelayed}} days
-                  </span> </ng-template> 
-                  <div class="mt-2">
-                  <span class="d-flex justify-content-end ">
-                      <sm-button *ngIf="!updateArray[i]" class="basic purple" id="updateBtn" icon="pencil alternate"
-                        (click)="update(i)"></sm-button>
-                      <sm-button class="basic green" icon="check" *ngIf="!updateArray[i]"
-                        (click)="completed(todo.id,i)"></sm-button>
-                        <sm-button class=" basic red" icon="close " *ngIf="!updateArray[i]" (click)="delete(todo.id)"></sm-button>
-                      </span>
-                      </div>
-          <!-- </div>
+            <sm-segment class="mt-1 raised  blue"><span style="font-size:1.2em;font-weight:500">{{todo.work}}</span> -
+              <span *ngIf="todo.daysDelayed>0 ;else elsePart" class="text-success" style="font-size:1em;">Remaining days
+                are
+                {{todo.daysDelayed}}</span>
+              <ng-template class="text-danger" #elsePart> <span class="text-danger"
+                  style="font-size:1.2em;font-weight: 500">Pending since {{-todo.daysDelayed}} days
+                </span> </ng-template>
+              <div class="mt-2">
+                <span class="d-flex justify-content-end ">
+                  <sm-button *ngIf="!updateArray[i]" class="basic purple" id="updateBtn" icon="pencil alternate"
+                    (click)="update(i)"></sm-button>
+                  <sm-button class="basic green" icon="check" *ngIf="!updateArray[i]"
+                    (click)="completed(todo.id,i,status.status,todo.priority)"></sm-button>
+                  <sm-button class=" basic red" icon="close " *ngIf="!updateArray[i]"
+                    (click)="delete(todo.priority,status.status,todo.id)"></sm-button>
+                </span>
+              </div>
+              <!-- </div>
         </div> -->
-        <!-- <div class="row" >
+              <!-- <div class="row" >
           <div class="col-md-6"> -->
               <div *ngIf="updateArray[i]">
-                  <form class="form-group">
-                    <input type="text" class="form-control" placeholder="Work" [ngModelOptions]="{standalone: true}"
-                      [(ngModel)]="work">
-                    <br>
-                    <input type="date" class="form-control" placeholder="completion date" [ngModelOptions]="{standalone: true}" value="{{currentDate | date:'MM/dd/yy'}}"
-                      [(ngModel)]="completionDate">
-                    <br>
-                    <input *ngIf='type ==="office"' type="text" class="form-control" placeholder="Assign Task" [ngModelOptions]="{standalone: true}" 
-                    [(ngModel)]="assignTask">
-                    <br>
-                    <sm-button class="basic olive" (click)="updateTodo(todo.id,i)">Update</sm-button>
-                  </form>
-                </div>
-                
+                <form class="form-group">
+                  <input type="text" class="form-control" placeholder="Work" [ngModelOptions]="{standalone: true}"
+                    [(ngModel)]="work">
+                  <br>
+                  <input type="date" class="form-control" placeholder="completion date"
+                    [ngModelOptions]="{standalone: true}" value="{{currentDate | date:'MM/dd/yy'}}"
+                    [(ngModel)]="completionDate">
+                  <br>
+                  <input *ngIf='type ==="office"' type="text" class="form-control" placeholder="Assign Task"
+                    [ngModelOptions]="{standalone: true}" [(ngModel)]="assignTask">
+                  <br>
+                  <sm-button class="basic olive" (click)="updateTodo(todo.id,i)">Update</sm-button>
+                </form>
+              </div>
+
               <!-- </div>
           </div> -->
-        </sm-segment>
+            </sm-segment>
+          </div>
         </div>
-      </sm-item>
-  </div>
-  </sm-list>
-  <div class=" text-center">
-    <sm-button class="circular basic blue mt-2 big" title="Add type of work you want to complete(like Shopping, Grocery ... )" icon="plus" (click)="toggleTask()"> </sm-button>
-  </div>
- 
-</div>
-<div class="container" *ngIf="taskAddition">
-  <h1 class="text-center text-danger">Add Task </h1>
-  <form class="form-group">
-    <label for="">Task :</label>
-    <input type="text" class="form-control" placeholder="Work" [ngModelOptions]="{standalone: true}" [(ngModel)]="work" required>
-    <br>
-    <label for="">Completion Date :</label>
-    <input type="date" class="form-control" placeholder="completion date" [ngModelOptions]="{standalone: true}" required
-      [(ngModel)]="completionDate" >
-      <br>
-      <label *ngIf='type ==="office" ' for="">Assign  Task to</label>
-      <input *ngIf='type ==="office"' type="text" class="form-control" placeholder="Assign Task" [ngModelOptions]="{standalone: true}"
-      [(ngModel)]="assignTask" >
-      <br>
-    <button class="btn btn-outline-primary" (click)="makeTodo()">Add To List</button>
-  </form>
-</div>
+        <div class=" text-center">
+          <sm-button *ngIf="!taskAddition[j]" class="circular basic blue mt-2 medium"
+            title="Add type of work you want to complete(like Shopping, Grocery ... )" icon="plus"
+            (click)="toggleTask(j)"> </sm-button>
+            <sm-button *ngIf="taskAddition[j]" class="circular basic blue mt-2 medium"
+            title="Add type of work you want to complete(like Shopping, Grocery ... )" icon="minus"
+            (click)="toggleTask(j)"> </sm-button>
+        </div>
+      </div>
 
-<div class="container mt-1" *ngIf="type.toLowerCase()==='office'">
+    
+      <div class="container" *ngIf="taskAddition[j]">
+        <h1 class="text-center text-danger">Add Task </h1>
+        <form class="form-group">
+          <label for="">Task :</label>
+          <input type="text" class="form-control" placeholder="Work" [ngModelOptions]="{standalone: true}"
+            [(ngModel)]="work" required>
+          <br>
+          <label for="">Completion Date :</label>
+          <input type="date" class="form-control" placeholder="completion date" [ngModelOptions]="{standalone: true}"
+            required [(ngModel)]="completionDate">
+          <br>
+          <label *ngIf='type ==="office" ' for="">Assign Task to <sub>Optional</sub></label>
+          <input *ngIf='type ==="office"' type="text" class="form-control" placeholder="Write Email Address"
+            [ngModelOptions]="{standalone: true}" [(ngModel)]="assignTask">
+          <br>
+          <button class="btn btn-outline-primary" (click)="makeTodo(j,status.status)">Add To List</button>
+        </form>
+      </div>
+
+
+      <!-- </sm-list> -->
+      <!--==================== First list ends , Second starts =========== -->
+    </sm-segment>
+    <div class="eight wide column">
+      <sm-segment>
+          <form action="" class="form-group" *ngIf="listAddition"> 
+             <input type="text" class="form-control" placeholder="Add list" [(ngModel)]="list" [ngModelOptions]="{standalone: true}">
+            <p class="text-center m-1">
+               <sm-button class=" basic teal" (click)='addList()'>Add List </sm-button>  
+            </p>
+          </form>
+          <p class="text-center m-3" *ngIf="!listAddition">
+              <sm-button class="basic green" (click)="toggleList()">Add Another List <i class="clipboard list icon"></i></sm-button>
+          </p>
+      </sm-segment>
+    </div>
+  </div>
+</div>
+<!-- ================================================================ -->
+<!--     End of List          -->
+<!-- ================================================================ -->
+<!-- <div class="container mt-3">
+  <form action="" class="form-group">
+    <input type="text" class="form-control" placeholder="Add list" [(ngModel)]="list" [ngModelOptions]="{standalone: true}">
+    <p class="text-center">
+      <sm-button class=" basic teal" (click)='addList()'>Add List </sm-button>  
+    </p>
+  </form>
+</div> -->
+
+<!-- =============================================================================================================================================================================================================== -->
+
+<div class="container mt-4" *ngIf="type.toLowerCase()==='office'">
   <h3>These Minds also work in <span class="text-danger">{{office}}</span></h3>
-<sm-list class="animated" >
-  <sm-item *ngFor="let item of user "  >
-    <sm-segment class="raised colored blue">{{item.userName}} 
-      <!-- <p class="mt-1">
+  <sm-list class="animated">
+    <sm-item *ngFor="let item of user ">
+      <sm-segment class="raised colored blue">{{item.userName}} - {{item.email}}
+        <!-- <p class="mt-1">
           <sm-button class="basic red" (click)="clickMe($event)" icon="thumbs up">Click Me</sm-button>
       </p> -->
-    </sm-segment>
-  </sm-item>
-</sm-list>
+      </sm-segment>
+    </sm-item>
+  </sm-list>
 </div>
-<!-- <sm-button  class=" blue " icon="sign out">Sign Out</sm-button> -->
+<!-- <button (click)='openSnackBar()'>snackBar</button> -->
 
-
-<!-- lists in ng-semantic -->
-<!-- <sm-list class="animated">
-  <sm-item *ngFor="let item of todos "  >
-    <sm-segment class="raised colored blue">{{item.work}} and {{item?.daysDelayed}}
-      <p class="mt-1">
-          <sm-button class="basic red" (click)="clickMe($event)" icon="thumbs up">Click Me</sm-button>
-      </p>
-    </sm-segment>
-  </sm-item>
-</sm-list> -->
-<!-- <sm-button icon="close "></sm-button> -->
-
-<!-- Buttons -->
-
-<!-- <sm-button class="basic red" (click)="clickMe($event)" icon="thumbs up">Click Me</sm-button>
-<sm-button class=" circular facebook" icon="facebook" (click)="clickMe($event)" >
-  <i ></i>
-</sm-button>
-<sm-button class="fluid">Block Btn</sm-button> -->
-
-<!-- <sm-menu title="Angular2" class="inverted teal" logo="/assets/images/semantic.png">
-  <a sm-item *ngFor="let item of items" [icon]="item.icon">{{item?.title}}</a>
-
-  <sm-menu class="menu right secondary">
-      <a sm-item href="#/elements/menu" 
-          image="http://semantic-ui.com/images/avatar/small/stevie.jpg">Elliot Fu</a>
-      <a sm-item icon="sidebar big"></a>
-  </sm-menu>
-</sm-menu> -->
-
-
-<!------------------------- saving code-------------------------------- -->
-<!-- -------------------------------- -->
-<!-- ----------------------------- -->
-<!-- <h1 class=" text-center">Pending Task</h1>
-<div class="d-flex justify-content-end container">
-</div>
-<div class="container">
-  <ul class="list-group " >
-    <div   cdkDropList (cdkDropListDropped)="drop($event)" >
-      <li *ngFor='let todo of todos ; let i = index'   class="list-group-item list-group-item-dark p-0 "[@openClose]="fadingArray[i] ? 'closed' : 'open'"   cdkDrag  >
-        <div *ngIf="todo.idOfUser===userId">
-        <div class="row" >
-          <div class="col-md-6">
-              <sm-segment class="m-1 raised colored green">{{todo.work}} - <span *ngIf="todo.daysDelayed>0 ;else elsePart" class="text-success">Remaining days are
-                  {{todo.daysDelayed}}</span>
-                <ng-template class="text-danger" #elsePart> <span class="text-danger">Days Delayed are {{-todo.daysDelayed}}
-                  </span> </ng-template> 
-                  
-              </sm-segment>
-          </div>
-        </div>
-        <div class="row" >
-          <div class="col-md-6">
-              <div *ngIf="updateArray[i]">
-                  <form class="form-group">
-                    <input type="text" class="form-control" placeholder="Work" [ngModelOptions]="{standalone: true}"
-                      [(ngModel)]="work">
-                    <br>
-                    <input type="date" class="form-control" placeholder="completion date" [ngModelOptions]="{standalone: true}"
-                      [(ngModel)]="completionDate">
-                    <br>
-                    <button class="btn btn-outline-primary btn-sm" (click)="updateTodo(todo.id,i)">Update</button>
-                  </form>
-                </div>
-                <button *ngIf="!updateArray[i]" class="btn-sm btn btn-outline-warning m-1" id="updateBtn"
-                  (click)="update(i)">Update</button>
-                <button class="btn btn-outline-danger m-1 btn-sm" *ngIf="!updateArray[i]" (click)="delete(todo.id)">Delete</button>
-                <button class="btn btn-outline-success btn-sm" *ngIf="!updateArray[i]"
-                  (click)="completed(todo.id,i)">Completed</button>
-              </div>
-          </div>
-        </div>
-      </li>
-  </div>
-</ul> -->
-<!-- <i class="check icon"></i> -->
+<!-- <div class="ui grid">
+<div class="six wide column" cdkDropList (cdkDropListDropped)="moveItem($event,'l1')"
+    [cdkDropListConnectedTo]='secondList' #firstList='cdkDropList'
+    [cdkDropListData]='todo'
+>
+  <sm-segment cdkDrag *ngFor="let todo of todo ">{{todo.work}}  </sm-segment>
+</div> 
+<div class="six wide column" cdkDropList (cdkDropListDropped)="moveItem($event,'l2')"
+    [cdkDropListConnectedTo]='[firstList, thirdList]' #secondList='cdkDropList'
+    [cdkDropListData]='doing'
+>
+  <sm-segment cdkDrag *ngFor="let item of doing">{{item.work}}</sm-segment>
+</div> 
+<div class="four wide column" cdkDropList (cdkDropListDropped)="moveItem($event,'l3')"
+    [cdkDropListConnectedTo]='secondList' #thirdList='cdkDropList'
+    [cdkDropListData]='done'
+>
+  <sm-segment cdkDrag *ngFor="let item of done">{{item.work}}</sm-segment>
+</div> 
+</div> -->

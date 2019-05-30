@@ -1,36 +1,45 @@
+<div style="font-family: 'Courier New', Courier, monospace">
 <sm-menu class=" inverted blue mb-4">
   <div class=" item">
       <i class="tasks icon"></i>
   </div>
   <a href="" class="header item" style="font-size:18px;">TodoApp</a>
   <sm-menu class="right menu pr-4">
-      <a href="" class="item">About Us</a>
+      <a  routerLink='/user/profile' class="item">
+          Hey {{user[0].userName}}  </a>
+          
+          
       <sm-button href="" class="item " icon="sign out" (click)="SignOut()">Logout</sm-button>
   </sm-menu>
 </sm-menu>
 <div class="container">
 <div class=" row "  >
-<div   *ngFor='let proj of arr; let i= index'>
-   
-   <sm-segment class="raised  blue m-1" *ngIf='proj.userId===userId'>
+<div   *ngFor='let proj of arr; let i= index' class="col-md-4">
+   <!-- <div class="col-"></div> -->
+   <sm-segment class="raised  blue m-1 "  *ngIf='proj.userId===userId'>
       <!-- <sm-button class="basic blue " icon="close"></sm-button> -->
-      <i class="close icon" (click)="close(i)"></i>
+      <i class="close icon blue" (click)="close(i)"></i>
       <br>
-      <div class="mb-5 ml-5 mr-5 mt-4"  (click)="navigate(proj.type)">
-        {{proj.type}}
+      <div class="mx-5 mb-5 mt-3 text-center"  (click)="navigate(proj.type)" style="font-size: 2.0rem;color: rgb(7, 110, 200)">
+        {{proj.type.toUpperCase()}}
       </div>
    </sm-segment>
 </div>
 </div>
 </div>
 
-<div class=" text-center" *ngIf='!flag'>
-    <sm-button class="circular basic blue mt-2 big" icon="plus" (click)="toggleProject()"> </sm-button>
+<div class=" text-center" >
+    <sm-button *ngIf='!flag' class="circular basic blue mt-2 big" icon="plus" (click)="toggleProject()"> </sm-button>
+    <sm-button *ngIf='flag' class="circular basic blue mt-2 big" icon="minus" (click)="toggleProject()"> </sm-button>
   </div>
 <div class="container" *ngIf='flag'>
-  <h2 class="text-center">Add Project</h2>
-  <div class="form-group">
+  <h2 class="text-center">Add  Project</h2>
+  <div class="form-group" style="width: 30%;margin-left: 35%">
     <input class="form-control" type="text" placeholder="type" [(ngModel)]='project'>
   </div>
-  <sm-button class="" (click)="addProject()">Add</sm-button>
+  <p class="text-center">
+    <sm-button class="" (click)="addProject()">Add</sm-button>
+  </p>
+  
+</div>
 </div>

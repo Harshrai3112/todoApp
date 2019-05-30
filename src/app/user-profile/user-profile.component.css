@@ -1,0 +1,8 @@
+.name{
+  font-size: 3.2rem;
+}
+@media (max-width : 600px){
+  .name{
+    font-size: 2rem;
+  }
+}

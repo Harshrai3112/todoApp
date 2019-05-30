@@ -1,0 +1,35 @@
+.form-control{
+  font-size: 1.1rem;
+}
+/* .form-group{
+  width:40% ;
+  height: 50%;
+} */
+#firstElement{
+  background-image: url('https://images.pexels.com/photos/159627/pencils-clips-colour-pencils-foam-rubber-159627.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  padding: 5% 22%;
+ 
+}
+.label{
+  margin-bottom: 1%;
+  margin-top: 10px;
+  font-size: 1rem;
+  color: aliceblue;
+}
+#secondElement{
+  padding: 10%;
+  background-color: rgba(255, 254, 247, 0.2)
+}
+@media (max-width: 550px){
+  #firstElement{
+    padding: 5% 2%;
+  }
+  #secondElement{
+
+    padding: 5%;
+  }
+}

@@ -6,6 +6,7 @@ export class Todo {
   idOfUser: string;
   priority: number;
   type: string;
+  taskStatus: string;
   // users: {
   //   userId: boolean;
   // }

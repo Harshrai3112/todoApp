@@ -12,5 +12,8 @@ export class UserService {
   getUser(){
     return this.firestore.collection('User').snapshotChanges();
   }
+  updateUser(id,update){
+    this.firestore.doc('User/'+ id).update(update);
+  }
   constructor(private firestore: AngularFirestore) { }
 }

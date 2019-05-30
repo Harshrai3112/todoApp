@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   userArray: any;
   email: any;
   passwd: any;
+  findUser = 0;
   constructor(private afAuth: AngularFireAuth, private router: Router, private ngZone: NgZone, private userService: UserService) {
     this.userService.getUser().subscribe(data => {
       this.userArray = data.map(item => {
@@ -37,13 +38,30 @@ export class LoginComponent implements OnInit {
   doGoogleLogin() {
     return this.AuthLogin(new auth.GoogleAuthProvider());
   }
+  routeToSignOut(){
+    this.afAuth.auth.signOut().then(() => {
+      this.router.navigate(['register']);
+    });
+  }
   // Auth logic to run auth providers
   AuthLogin(provider) {
     return this.afAuth.auth.signInWithPopup(provider)
       .then((result) => {
-        this.ngZone.run(() => {
-          this.router.navigate(['homePage']);
+        this.userArray.forEach(val => {
+          if(val.userId === result.user.uid){
+           this.findUser = 1;
+          } 
         });
+        if(this.findUser === 1){
+          this.ngZone.run(() => {
+            this.router.navigate(['homePage']);
+          });
+          this.findUser =0 ;
+        } else {
+          window.alert('You don\'t have account please create first ');
+          this.routeToSignOut();
+        }
+       
         if (this.userArray.length === 0) {
           this.userService.createUser({ userId: result.user.uid, displayName: result.user.displayName });
         }

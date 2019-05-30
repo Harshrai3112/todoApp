@@ -22,7 +22,11 @@ import {NgSemanticModule} from 'ng-semantic';
 import { HomePageComponent } from './home-page/home-page.component';
 import { ProjectsService} from 'src/app/shared/projects.service';
 import { OfficeService } from 'src/app/shared/office.service';
+import { StatusService} from './shared/status.service';
 // import {SuiModule} from 'ng2-semantic-ui';
+import {MatSnackBarModule} from '@angular/material/snack-bar'; 
+import {MatSnackBar} from '@angular/material';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -31,10 +35,12 @@ import { OfficeService } from 'src/app/shared/office.service';
     FirstPageComponent,
     LoginComponent,
     SignUpComponent,
-    HomePageComponent
+    HomePageComponent,
+    UserProfileComponent
   ],
   imports: [
     // SuiModule,
+    MatSnackBarModule,
     NgSemanticModule,
     DragDropModule,
     AngularFirestoreModule,
@@ -45,6 +51,7 @@ import { OfficeService } from 'src/app/shared/office.service';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     RouterModule.forRoot([ 
+      {path: 'user/profile', component: UserProfileComponent},
       { path: '', redirectTo: 'login',  pathMatch: 'full'},
       { path: 'login', component: LoginComponent },
       {path: 'homePage', component: HomePageComponent},
@@ -52,7 +59,7 @@ import { OfficeService } from 'src/app/shared/office.service';
       { path: 'register', component: SignUpComponent}
     ])
   ],
-  providers: [TodosService, AngularFirestore, UserService, ProjectsService, OfficeService ],
+  providers: [TodosService, AngularFirestore, UserService, ProjectsService, OfficeService, StatusService , MatSnackBar],
   bootstrap: [AppComponent]
 })
 export class AppModule {

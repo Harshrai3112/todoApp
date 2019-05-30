@@ -1,13 +1,35 @@
-/* #loginComp{
-  background-image: url("https://images.unsplash.com/photo-1469212044023-0e55b4b9745a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60");
-  background-repeat: no-repeat;
-
-  background-size: cover;
+#loginComp{
+  margin-top: 0%;
+  background-image: url("https://images.pexels.com/photos/261579/pexels-photo-261579.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
   height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .backColor{
-
-    margin: 0 25%;
-    padding-bottom:20%; 
-   background-color: rgba(250, 142, 100, 0.8);
-} */
+  padding-top:5%; 
+  margin:0% 10%;
+}
+form{
+  max-width: 450px;
+  height: 300px;
+}
+.label{
+  font-size: 1.3rem;
+  color: wheat;
+}
+h1{
+  color: wheat;
+}
+#seg{
+ padding: 25px;
+ background-color: rgba(255,254,247,0.3)
+}
+@media  (max-width: 550px){
+  .backColor{
+  margin: 0% ;
+  }
+  form{
+    height: 250px;
+  }
+}

@@ -6,7 +6,8 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { TodosService } from 'src/app/shared/todos.service';
 import { UserService } from 'src/app/shared/user.service';
 import { User } from 'src/app/shared/user.model';
-import { forEach } from '@angular/router/src/utils/collection';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { StatusService } from '../shared/status.service';
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
@@ -20,39 +21,35 @@ export class HomePageComponent implements OnInit {
   userId: any;
   office: string;
   // tslint:disable-next-line:max-line-length
-  constructor(private router: Router, private proService: ProjectsService, private afAuth: AngularFireAuth, private todoService: TodosService, private userService: UserService) { }
+  constructor(private router: Router, private proService: ProjectsService, private afAuth: AngularFireAuth, private todoService: TodosService, private userService: UserService, private firestore: AngularFirestore, private statusService: StatusService) { }
 
   ngOnInit() {
-    this.proService.getProject().subscribe(data => {
-      this.arr = data.map(item => {
-        return {
-          id: item.payload.doc.id,
-          ...item.payload.doc.data()
-        } as Project;
-      });
-    });
+    
     this.afAuth.authState.subscribe(user => {
-      if (user) {
+      if(user){
         this.userId = user.uid;
       }
-    });
-    this.userService.getUser().subscribe(data => {
-      this.user = data.map(item => {
-        return {
-          id: item.payload.doc.id,
-          ...item.payload.doc.data()
-        } as User;
+      this.firestore.collection('User', ref => ref.where('userId','==',this.userId)).snapshotChanges().subscribe(temp => {
+        this.user = temp.map(item => {
+          return Object.assign(item.payload.doc.data());
+        });
       });
-      // tslint:disable-next-line:prefer-for-of
-      // for (let i = 0; i < this.user.length; i++) {
-      //   if (this.user[i].userId === this.userId && this.user[i].officeName !== '') {
-      //     this.proService.addProject({ type: 'office', userId: this.userId });
-      //   }
-      // }
+      this.proService.getProject(this.userId).subscribe(data => {
+        this.arr = data.map(item => {
+          return {
+            id: item.payload.doc.id,
+            ...item.payload.doc.data()
+          } as Project;
+        });
+      });
     });
+
   }
   addProject() {
-    this.proService.addProject({ type: this.project, userId: this.userId });
+    this.statusService.addStatus({ status: 'todo', type: this.project.toLowerCase(), userId: this.userId });
+    this.statusService.addStatus({ status: 'doing', type: this.project.toLowerCase(), userId: this.userId });
+    this.statusService.addStatus({ status: 'done', type: this.project.toLowerCase(), userId: this.userId });
+    this.proService.addProject({ type: this.project.toLowerCase(), userId: this.userId });
     this.flag = !this.flag;
   }
   toggleProject() {
@@ -67,6 +64,7 @@ export class HomePageComponent implements OnInit {
     });
   }
   close(i) {
-    this.proService.deleteProject(this.arr[i].id);
+    console.log('close');
+    this.proService.deleteProject(this.arr[i].id, this.arr[i].type, this.userId);
   }
 }
