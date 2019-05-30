@@ -5,13 +5,7 @@
 export const environment = {
   production: false,
   firebaseConfig : {
-    apiKey: 'AIzaSyBOq6FMaJEq2oGQx9DqxHSMf4zDMoquEEk',
-    authDomain: 'todolist-a7529.firebaseapp.com',
-    databaseURL: 'https://todolist-a7529.firebaseio.com',
-    projectId: 'todolist-a7529',
-    storageBucket: 'todolist-a7529.appspot.com',
-    messagingSenderId: '803508965345',
-    appId: '1:803508965345:web:5651e5f359c3576c'
+    
   }
 };
 
