@@ -1,0 +1,13 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.19.0
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-HTTPSPROXYAGENT-469131:
+    - onsenui > gulp-protractor > protractor > browserstack > https-proxy-agent:
+        patched: '2021-03-10T08:37:27.436Z'
+    - onsenui > gulp-protractor > protractor > saucelabs > https-proxy-agent:
+        patched: '2021-03-10T08:37:27.436Z'
+  SNYK-JS-LODASH-567746:
+    - onsenui > gulp-protractor > async > lodash:
+        patched: '2021-03-10T08:37:27.436Z'
