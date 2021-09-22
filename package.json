@@ -39,7 +39,7 @@
     "simple-web-notification": "^1.0.32",
     "tslib": "^1.9.3",
     "zone.js": "~0.9.1",
-    "snyk": "^1.479.0"
+    "snyk": "^1.685.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.800.0",
