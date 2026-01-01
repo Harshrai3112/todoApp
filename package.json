@@ -33,7 +33,7 @@
     "ng-semantic": "^1.1.13",
     "ng2-semantic-ui": "^0.9.7",
     "ngx-onsenui": "^7.0.0",
-    "onsenui": "^2.10.8",
+    "onsenui": "^2.11.1",
     "rxjs": "~6.5.2",
     "rxjs-compat": "^6.5.2",
     "simple-web-notification": "^1.0.32",
